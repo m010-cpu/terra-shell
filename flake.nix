@@ -61,7 +61,7 @@
           cp -r * $out/share
           ags bundle ${entry} $out/bin/${pname} --gtk 4 -d "SRC='$out/share'"
 
-          runHook postInstall
+          # runHook postInstall
         '';
       };
     };
