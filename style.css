@@ -5,8 +5,8 @@
 .bar-container {
   background-color: #f4f3ec;
   border: 2px solid #878573;
-  margin: 6px;
-  min-height: 34px;
+  margin: 6px 6px 0 6px;
+  min-height: 36px;
 }
 
 .bar-container * {

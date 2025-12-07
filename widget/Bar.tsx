@@ -1,4 +1,4 @@
-import { Astal } from "ags/gtk4";
+import { Astal, Gtk, Gdk } from "ags/gtk4";
 import Workspaces from "./Workspaces";
 import Clock from "./Clock";
 import Battery from "./Battery";
@@ -13,15 +13,15 @@ import Audio from "./Audio";
 
 const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
 
-export default function Bar(monitor: number = 0) {
+export default function Bar(monitor: Gdk.Monitor) {
     return (
         <window
             visible
             layer="top"
             anchor={TOP | LEFT | RIGHT}
-            exclusivity="exclusive"
+            exclusivity={Astal.Exclusivity.EXCLUSIVE}
             class="bar-window"
-            monitor={monitor}
+            gdkmonitor={monitor}
         >
             <box class="bar-container" hexpand>
                 <centerbox
