@@ -1,0 +1,42 @@
+.bar-window {
+  background-color: transparent;
+}
+
+.bar-container {
+  background-color: #f4f3ec;
+  border: 2px solid #878573;
+  margin: 6px;
+  min-height: 34px;
+}
+
+.bar-container * {
+  color: #5f5e4e;
+}
+
+button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 5px;
+}
+
+button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.ws.focused label {
+  border-bottom: 3px solid #7d9726;
+}
+
+.battery,
+.network,
+.bluetooth,
+.clock,
+.cpu,
+.ram,
+.disk,
+.microphone,
+.audio {
+  padding: 0 3px;
+}
+
