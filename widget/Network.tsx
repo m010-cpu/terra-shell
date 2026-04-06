@@ -23,25 +23,38 @@ export default function NetworkWidget() {
                             return;
                         }
 
-                        // 3. WiFi disconnected
+                        // 3. Wired connecting
+                        if (network.wired && network.wired.enabled &&
+                            network.wired.internet === Network.Internet.CONNECTING) {
+                            self.icon_name = "network-wired-acquiring-symbolic";
+                            return;
+                        }
+
+                        // 4. WiFi connecting
+                        if (network.wifi && network.wifi.enabled &&
+                            network.wifi.internet === Network.Internet.CONNECTING) {
+                            self.icon_name = "network-wireless-acquiring-symbolic";
+                            return;
+                        }
+
+                        // 5. WiFi disconnected
                         if (network.wifi && network.wifi.enabled &&
                             network.wifi.internet === Network.Internet.DISCONNECTED) {
                             self.icon_name = "network-wireless-disconnected-symbolic";
                             return;
                         }
 
-                        // 4. Wired disconnected
+                        // 6. Wired disconnected
                         if (network.wired && network.wired.enabled &&
                             network.wired.internet === Network.Internet.DISCONNECTED) {
                             self.icon_name = "network-wired-disconnected-symbolic";
                             return;
                         }
 
-                        // 5. Fallback: airplane mode / no radios
+                        // 7. Fallback: airplane mode / no radios
                         self.icon_name = "airplane-mode-symbolic";
                     };
 
-                    // Connect to signals
                     const wifiSignals: number[] = [];
                     const wiredSignals: number[] = [];
 
@@ -52,6 +65,7 @@ export default function NetworkWidget() {
                     }
                     if (network.wired) {
                         wiredSignals.push(network.wired.connect("notify::icon-name", update));
+                        wiredSignals.push(network.wired.connect("notify::enabled", update));
                         wiredSignals.push(network.wired.connect("notify::internet", update));
                     }
 

@@ -1,26 +1,53 @@
-import { createBinding } from "ags";
+import { Gtk } from "ags/gtk4";
 import Wp from "gi://AstalWp";
 
 export default function Audio() {
     const wp = Wp.get_default();
-    const speaker = wp?.audio.defaultSpeaker;
-
-    if (!speaker) return <box />;
-
-    const volume = createBinding(speaker, "volume");
-    const icon = createBinding(speaker, "volumeIcon");
+    if (!wp) return <box />;
 
     return (
         <box class="audio" spacing={2}>
-            <button onClicked={() => speaker.set_mute(!speaker.mute)}>
-                <box spacing={2}>
-                    <image iconName={icon} />
-                    <label
-                        label={volume((v) => `${Math.round(v * 100)}%`)}
-                        visible={createBinding(speaker, "mute").as(m => !m)}
-                    />
-                </box>
-            </button>
+            <button onRealize={(self: Gtk.Button) => {
+                let speaker = wp.audio.defaultSpeaker;
+                let speakerSignals: number[] = [];
+
+                const box = new Gtk.Box({ spacing: 2 });
+                const image = new Gtk.Image();
+                const label = new Gtk.Label();
+                box.append(image);
+                box.append(label);
+                self.child = box;
+
+                const updateSpeaker = () => {
+                    if (!speaker) return;
+                    image.icon_name = speaker.volumeIcon;
+                    label.label = `${Math.round(speaker.volume * 100)}%`;
+                    label.visible = !speaker.mute;
+                };
+
+                const connectSpeaker = () => {
+                    speakerSignals.forEach(id => speaker?.disconnect(id));
+                    speakerSignals = [];
+                    speaker = wp.audio.defaultSpeaker;
+                    if (!speaker) return;
+                    speakerSignals.push(speaker.connect("notify::volume", updateSpeaker));
+                    speakerSignals.push(speaker.connect("notify::volume-icon", updateSpeaker));
+                    speakerSignals.push(speaker.connect("notify::mute", updateSpeaker));
+                    updateSpeaker();
+                };
+
+                const audioId = wp.audio.connect("notify::default-speaker", connectSpeaker);
+                connectSpeaker();
+
+                self.connect("clicked", () => {
+                    if (speaker) speaker.set_mute(!speaker.mute);
+                });
+
+                self.connect("destroy", () => {
+                    speakerSignals.forEach(id => speaker?.disconnect(id));
+                    wp.audio.disconnect(audioId);
+                });
+            }} />
         </box>
     );
 }

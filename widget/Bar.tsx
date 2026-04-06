@@ -28,7 +28,7 @@ export default function Bar(monitor: Gdk.Monitor) {
                     hexpand
                     startWidget={
                         <box hexpand halign="start">
-                            <Workspaces />
+                            <Workspaces output={monitor.connector} />
                         </box>
                     }
                     centerWidget={

@@ -9,7 +9,8 @@
   min-height: 36px;
 }
 
-.bar-container * {
+.bar-container label,
+.bar-container image {
   color: #5f5e4e;
 }
 
@@ -24,8 +25,13 @@ button:hover {
   background: rgba(0, 0, 0, 0.1);
 }
 
+/* .ws.focused label { */
+/*   border-bottom: 3px solid #7d9726; */
+/* } */
 .ws.focused label {
   border-bottom: 3px solid #7d9726;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .battery,
